@@ -9,7 +9,9 @@
 //
 // This is the main entry point for the ch package
 //
+
 var paths = require('./lib/paths.js')
+  , views = require('./lib/views.js')
   ;
 
 exports.paths = paths;
