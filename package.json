@@ -25,7 +25,9 @@
   },
   "homepage": "https://github.com/pieper/ch",
   "dependencies": {
+    "commander": "^2.3.0",
     "cradle": "^0.6.7",
-    "underscore": "^1.6.0"
+    "underscore": "^1.6.0",
+    "underscore.string": "^2.3.3"
   }
 }
