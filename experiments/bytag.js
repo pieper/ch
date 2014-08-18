@@ -84,6 +84,8 @@ exports.idsForModality = function(modality) {
 }
 
 
+// experiments / Testing
+
 exports.elementValueDistribution('00080060', function(key,row) {
   console.log('Modality: ', key[1], 'Count: ', row);
 });

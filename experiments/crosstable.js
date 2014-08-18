@@ -14,7 +14,7 @@ exports.seriesInstanceTable  = function(callback) {
     reduce: true,
     group_level: 3,
     stale: 'update_after',
-    limit: 100
+    limit: 1000
   };
   chronicle.view('instances/context', viewOptions, function(err,response) {
     if (err) {
