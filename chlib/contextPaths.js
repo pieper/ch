@@ -2,7 +2,7 @@
 // Copyright 2014 Isomics, Inc.
 // Author: Steve Pieper
 //
-// Distributed under the terms of the Slicer Licesnse v 1.0
+// Distributed under the terms of the Slicer License v 1.0
 // (see License.txt in this distribution).
 //
 
@@ -155,6 +155,9 @@ to simplify processing.  Possible options:
 */
 
 //TODO: move these to tests/path-tests.js
+if (false) {
+
+//TODO: move these to tests/path-tests.js
 var paths = [
     , "/[inst,patid]/[studydes,studid]/[modality,serdesc,serid]/instid"
     , "/[inst,patid]/[studydes,studid]/[modality,serdesc,serid]"
@@ -169,7 +172,6 @@ _.each(paths, function(path) {
 });
 
 
-//TODO: move these to tests/path-tests.js
 var path = "/[inst,patid]/[studydes,studid]/[modality,serdesc,serid]/instid"
 console.log(path);
 console.log("maps to ");
@@ -180,5 +182,5 @@ var newPath = exports.keyToPath(key);
 console.log(newPath);
 
 console.log("\npath and key are equal?", path == newPath);
-
+}
 
