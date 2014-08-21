@@ -29,5 +29,7 @@
     "cradle": "^0.6.7",
     "node-uuid": "^1.4.1",
     "underscore": "^1.6.0"
+    "commander": "^2.3.0",
+    "underscore.string": "^2.3.3"
   }
 }

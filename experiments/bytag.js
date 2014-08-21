@@ -37,32 +37,40 @@ if ( false ) {
 }
 
 
-//chronicle.save('_design/tags', tagDesign);
+chronicle.save('_design/tags', tagDesign);
 
-// get list of number of instances by modality
-modalityOptions = {
-  startkey: ["00080060", ""], 
-  endkey  : ["00080060", {}], 
-  reduce: true,
-  group_level: 2
-};
-chronicle.view('tags/byTagAndValue', modalityOptions, function(err,response) {
-  if (err) {
-    console.log(err);
-    return;
-  }
-  util.inspect(response);
-  response.forEach(function(key,row,id) {
-    console.log(key,row);
+// get a distribution of the values of the given tag
+// - a count is returned for each unique value of the element
+exports.elementValueDistribution  = function(tag, callback) {
+  viewOptions = {
+    startkey: [tag, ""],
+    endkey  : [tag, {}],
+    reduce: true,
+    group_level: 2,
+    stale: 'update_after'
+  };
+  chronicle.view('tags/byTagAndValue', viewOptions, function(err,response) {
+    if (err) {
+      console.log(err);
+      return;
+    }
+    util.inspect(response);
+    response.forEach(function(key,row,id) {
+      callback(key,row);
+    });
   });
-});
+}
+
+
+
 
 // get ids of of instances by modality
 exports.idsForModality = function(modality) {
   modalityOptions = {
-    startkey: ["00080060", modality], 
-    endkey: ["00080060", modality+"\u9999"], 
+    startkey: ["00080060", modality],
+    endkey: ["00080060", modality+"\u9999"],
     reduce: false,
+    stale: 'update_after'
   };
   chronicle.view('tags/byTagAndValue', modalityOptions, function(err,docs) {
     if (err) {
@@ -75,6 +83,22 @@ exports.idsForModality = function(modality) {
   });
 }
 
-exports.idsForModality('SR');
 
-exports.idsForModality('RWV');
+// experiments / Testing
+
+exports.elementValueDistribution('00080060', function(key,row) {
+  console.log('Modality: ', key[1], 'Count: ', row);
+});
+
+if (false) {
+
+  exports.idsForModality('SR');
+
+  exports.idsForModality('RWV');
+
+  exports.elementValueDistribution('00180080', function(key,row) {
+    console.log('TR: ', key[1], 'Count: ', row);
+  });
+
+
+}
