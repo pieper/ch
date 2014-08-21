@@ -37,6 +37,7 @@ if ( false ) {
 }
 
 
+// won't cause re-index unless the hash of the view changes
 chronicle.save('_design/tags', tagDesign);
 
 // get a distribution of the values of the given tag
