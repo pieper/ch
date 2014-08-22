@@ -20,13 +20,13 @@ var _commonOptions = {
 }
 
 /**
- * Calls the eachCallback for every series in the database.
+ * Calls the eachCallback for every query in the database.
  * Calls the finishedCallback after all have been processed.
  */
 exports._each = function(group_level, options) {
   options.viewOptions = _.defaults(options.viewOptions || {}, _commonOptions);
   options.viewOptions.group_level = group_level;
-  options.ch.chronicle.view('instances/context', options.viewOptions, function(err,response) {
+  return options.ch.chronicle.view('instances/context', options.viewOptions, function(err,response) {
     if (err) {
       options.errorCallback(err);
       return;
