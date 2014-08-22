@@ -14,22 +14,37 @@ _ = require("underscore");
 
 //---------------------------------------------------------------------------
 
+var _commonOptions = {
+  reduce: true,
+  stale: 'update_after',
+}
+
 /**
  * Calls the eachCallback for every series in the database.
  * Calls the finishedCallback after all have been processed.
  */
-exports.eachSeries = function(ch, eachCallback,finishedCallback) {
-  viewOptions = {
-    reduce: true,
-    group_level: 3,
-    stale: 'update_after',
-  };
-  ch.chronicle.view('instances/context', viewOptions, function(err,response) {
+exports._each = function(group_level, options) {
+  options.viewOptions = _.defaults(options.viewOptions || {}, _commonOptions);
+  options.viewOptions.group_level = group_level;
+  options.ch.chronicle.view('instances/context', options.viewOptions, function(err,response) {
     if (err) {
-      console.log(err);
+      options.errorCallback(err);
       return;
     }
-    response.forEach(eachCallback);
-    finishedCallback();
+    response.forEach(options.eachCallback);
+    options.finishedCallback();
   });
+}
+
+exports.eachPatient = function(options) {
+  return exports._each(1, options);
+}
+
+exports.eachStudy = function(options) {
+  return exports._each(2, options);
+}
+
+// Don't use until cradle view response is streamed
+exports.eachSeries = function(options) {
+  return exports._each(3, options);
 }

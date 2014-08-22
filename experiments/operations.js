@@ -5,16 +5,19 @@ var chlib = require("../");
 
 var ch = new(chlib.ch.Connection)();
 
-var seriesList = [];
+var studyList = [];
 
-console.log('checking for series');
-ch.context.eachSeries (ch,
-  eachCallback = function(key) {
-    seriesList.push(key);
-console.log('got series', key);
+console.log('checking for study');
+ch.context.eachStudy ( {
+  ch : ch,
+  eachCallback : function(value, key, list) {
+    console.log(value, key, list);
+    studyList.push(key);
   },
-  finishedCallback = function() {
-    console.log(seriesList);
+  finishedCallback : function() {
+    console.log(studyList);
+  },
+  errorCallback : function() {
+    console.log("Got an error!");
   }
-);
-
+});
