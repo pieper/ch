@@ -16,4 +16,5 @@ exports.ch.modules = {}
 exports.ch.modules.contextPaths = require('./chlib/contextPaths');
 exports.ch.modules.context      = require('./chlib/context');
 exports.ch.modules.views        = require('./chlib/views');
+exports.ch.modules.dicom        = require('./chlib/dicom');
 
