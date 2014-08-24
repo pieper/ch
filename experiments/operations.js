@@ -28,7 +28,7 @@ var studyStream = new stream.Stream();
 studyStream.writable = true
 
 studyStream.write = function (chunk) {
-  console.log('got: ', chunk);
+  console.log('got: ', chunk.toString());
 };
 
 studyStream.end = function () {
