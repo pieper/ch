@@ -5,6 +5,8 @@
 
  - but then a task that looks at all data related to 'chunk' (e.g. all studies for a patient) to make them into a new derived object that is 'view'able
 
+ - operations define query that is specific to their requirements, which may be a call back to couchdb or could be another network fetch.
+
 2) need a way to specify operations 
 
  - list the kind of data chunk data they require
@@ -20,6 +22,8 @@
  - results of the operation are expressed in the same provenance form so that the job queue is reduced.
 
 4) need changes api wrappers to watch job queues and trigger execution of the required tasks
+
+5) need a way to register that an operation has started to execute
 
 Examples:
 

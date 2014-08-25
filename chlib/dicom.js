@@ -32,4 +32,9 @@ exports.uid = function() {
   return "2.25." + idNumber.toString(10);
 }
 
-console.log(exports.uid());
+
+var testing = false; // TODO: use a testing package like mocha
+
+if (testing) {
+  console.log(exports.uid());
+}

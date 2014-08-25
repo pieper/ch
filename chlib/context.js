@@ -19,11 +19,17 @@ var _commonOptions = {
   stale: 'update_after',
 }
 
+var _defaultOptions = {
+  eachCallback : function(value, key, list) {},
+  finishedCallback : function() {},
+}
+
 /**
  * Calls the eachCallback for every query in the database.
  * Calls the finishedCallback after all have been processed.
  */
 exports._each = function(group_level, options) {
+  options = _.defaults(options || {}, _defaultOptions);
   options.viewOptions = _.defaults(options.viewOptions || {}, _commonOptions);
   options.viewOptions.group_level = group_level;
   return options.ch.chronicle.view('instances/context', options.viewOptions, function(err,response) {
