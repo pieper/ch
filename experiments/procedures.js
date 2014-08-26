@@ -45,6 +45,9 @@ studyStream.end = function () {
 var testing = true;
 
 if (testing) {
+  
+  var changesFeed = ch.agents.agent( {ch : ch} );
+
   console.log('checking for study');
   ch.context.eachStudy(studyOptions).pipe(studyStream);
 }

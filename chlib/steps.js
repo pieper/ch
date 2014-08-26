@@ -40,3 +40,19 @@ exports.step = function(options) {
   console.log('saving ', uid, options);
   return options.ch.chronicle.save(uid, options.doc, options.callback);
 }
+
+var stepsDesign = {
+    views : {
+        byName : {
+            map :
+              function(doc) {
+                if (doc.type === 'ch.step') {
+                  emit( doc.name, 1 );
+                }
+              },
+            reduce : "_count()",
+        },
+    }
+}
+
+exports._design = { steps : stepsDesign };
