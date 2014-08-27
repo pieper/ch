@@ -14,9 +14,13 @@
 //---------------------------------------------------------------------------
 
 // npm provided standard utilities
-var _ = require("underscore");
-var util = require("util");
+var cradle = require("commander");
 var cradle = require("cradle");
+var moment = require("moment");
+var _      = require("underscore");
+var util   = require("util");
+
+moment();
 
 // this package
 var chlib = require("../");
