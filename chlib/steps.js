@@ -24,7 +24,7 @@ var _stepDocDefaults = {
 }
 
 var _stepOptionsDefaults = {
-  callback : function(err,res) {console.log(err,res)},
+  saveCallback : function(err,res) {console.log(err,res)},
 }
 
 /**
@@ -37,8 +37,7 @@ exports.step = function(options) {
   options = _.defaults(options || {}, _stepOptionsDefaults);
   options.doc = _.defaults(options.doc || {}, _stepDocDefaults);
 
-  console.log('saving ', uid, options);
-  return options.ch.chronicle.save(uid, options.doc, options.callback);
+  return options.ch.chronicle.save(uid, options.doc, options.saveCallback);
 }
 
 var stepsDesign = {

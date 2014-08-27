@@ -15,7 +15,11 @@
 
 //---------------------------------------------------------------------------
 
+moment = require('moment');
 
+// When a change that matches the stepActivities filter is received, this callback
+// prints out a time-stamped list of all the activities related to that
+// step.
 exports._changeCallback = function(ch, change) {
   startkey = [change.id,];
   endkey = [change.id, {}];
@@ -27,17 +31,24 @@ exports._changeCallback = function(ch, change) {
     stale : 'update_after',
   };
 
+  console.log('got a change for step', change.id);
   ch.chronicle.view("activities/stepActivities", viewOptions, function(error,response) {
-    console.log(response);
+    if (error) {
+      console.log(error);
+    } else {
+      console.log("At", moment().format(), "stepActivities for", change.id, ":", response);
+    }
   });
 }
 
+// by default, look at all steps
 var _agentOptionsDefaults = {
   stepName : "*",
   changeCallback : exports._changeCallback,
   cradleOptions : {},
 }
 
+// filter the changes feed to only look for step activities
 var _agentCradleDefaults = {
   filter : "_view",
   view : "activities/stepActivities",
@@ -53,11 +64,15 @@ exports.agent = function(options) {
   options = _.defaults(options || {}, _agentOptionsDefaults);
   options.cradleOptions = _.defaults(_agentCradleDefaults);
 
-  //options.ch.chronicle.info(function);
+  // find out the current sequence number and then
+  // listen for all subsequent changes
+  options.ch.chronicle.info(function (err, info) {
+    var ch = options.ch;
+    options.cradleOptions.since = info.committed_update_seq;
+    var feed = ch.chronicle.changes(options.cradleOptions);
 
-  var ch = options.ch;
-  var feed = ch.chronicle.changes(options.cradleOptions);
+    feed.on('change', function(change) {options.changeCallback(ch, change);});
+  });
 
-  feed.on('change', function(change) {options.changeCallback(ch, change);});
 }
 

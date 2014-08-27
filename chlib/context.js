@@ -51,7 +51,9 @@ exports.eachStudy = function(options) {
   return exports._each(2, options);
 }
 
-// Don't use until cradle view response is streamed
+// Since this can buffer a lot of view rows before
+// calling the callback, consider using the 'request'
+// return value with a stream as shown in experiments/procedures.js
 exports.eachSeries = function(options) {
   return exports._each(3, options);
 }

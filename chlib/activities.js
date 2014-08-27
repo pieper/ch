@@ -22,7 +22,7 @@ var _activityDocDefaults = {
 }
 
 var _activityOptionsDefaults = {
-  callback : function(err,res) {console.log(err,res)},
+  callback : function(err,res) {console.log('saved activity', err,res)},
 }
 
 /**
@@ -35,7 +35,7 @@ exports.activity = function(options) {
   options = _.defaults(options || {}, _activityOptionsDefaults);
   options.doc = _.defaults(options.doc || {}, _activityDocDefaults);
 
-  console.log('saving ', uid, options);
+  console.log('saving activity', uid, options.doc);
   return options.ch.chronicle.save(uid, options.doc, options.callback);
 }
 
