@@ -5,7 +5,9 @@ var chlib = require("../");
 var ch = new(chlib.ch.Connection)();
 
 // Set up a render step
+// TODO: data types should have json-schema
 var studyRenderStep = {
+  type : "ch.step",
   name : "Study Render",
   desiredProvenance : {
     application : "3D Slicer",
@@ -20,6 +22,8 @@ var studyRenderStep = {
 // database for each of the studies.
 // TODO: we should be checking if there is an existing
 // step like this in the database before requesting a new step.
+// TODO: step uids could be hash of doc
+// TODO: inputs could be hash of contents
 var steps = 0;
 var studyOptions = {
   ch : ch,
@@ -35,7 +39,7 @@ var studyOptions = {
     steps++;
   },
   finishedCallback : function() {
-    console.log('entered ', steps, ' steps');
+    console.log('entered', steps, 'steps');
   },
 };
 
@@ -63,7 +67,7 @@ studyStream.write = function (chunk) {
 };
 
 studyStream.end = function () {
-  console.log('finished after ' + chunks + ' chunks');
+  console.log('finished after', chunks, 'chunks');
 };
 
 

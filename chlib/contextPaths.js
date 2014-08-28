@@ -105,7 +105,7 @@ exports.pathToViewOptions = function (path) {
     viewOptions.group_level = key.length + 1;
     if (key.length >= 1) {
       viewOptions.startkey = key;
-      var endkey = key.slice(0);
+      var endkey = key.slice(0); // shallow copy
       endkey.push({});
       viewOptions.endkey = endkey;
     }
