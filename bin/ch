@@ -19,8 +19,7 @@ var _.str = require('underscore.string');
 
 var ch = require('../ch')
 
-
-// Note: some program structure copied from 
+// Note: some program structure derived from
 // https://www.npmjs.org/package/jsonld
 
 // common output function

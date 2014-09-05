@@ -91,7 +91,7 @@ exports.elementValueDistribution('00080060', function(key,row) {
   console.log('Modality: ', key[1], 'Count: ', row);
 });
 
-if (false) {
+if (true) {
 
   exports.idsForModality('SR');
 
@@ -101,5 +101,8 @@ if (false) {
     console.log('TR: ', key[1], 'Count: ', row);
   });
 
+  exports.elementValueDistribution('00080016', function(key,row) {
+    console.log('SOPClassUID: ', key[1], 'Count: ', row);
+  });
 
 }
