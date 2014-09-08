@@ -11,13 +11,16 @@
 
 'use strict';
 
+exports.version = "0.0.1"
+
+var async = require('async');
 var fs = require('fs');
 var path = require('path');
 var program = require('commander');
 var _ = require('underscore');
-var _.str = require('underscore.string');
+var _s = require('underscore.string');
 
-var ch = require('../ch')
+var chlib = require('..')
 
 // Note: some program structure derived from
 // https://www.npmjs.org/package/jsonld
@@ -52,28 +55,50 @@ function _final(err, results) {
   }
 }
 
-// check for HTTP/HTTPS URL
-function _isHTTP(url) {
-  return (url.indexOf('http://') === 0 || url.indexOf('https://') === 0);
-}
-
 // init common command options
 function _chCommand(command) {
   command
-    .option('-h, --host <host>', 'host [localhost]');
-    .option('-p, --port <port>', 'port [5984]');
-    .option('-d, --database <database>', 'database name [Chronicle]');
+    .option('-H, --host <host>', 'host [localhost]')
+    .option('-P, --port <port>', 'port [5984]')
+    .option('-D, --database <database>', 'database name [Chronicle]');
   return command;
 }
 
-program
-  .version(module.exports.version)
-  .on('--help', function() {
-    console.log();
-    console.log(
-      '  Use ch to interact with your local Chronicle.'
-    console.log();
+program.version(module.exports.version);
+
+_chCommand(program.command('help [command]'))
+  .description('get detailed help')
+  .action(function(command,commands) {
+    command = command || 'all';
+    switch(command) {
+      case 'all' :
+      case 'ls' :
+        console.log("TODO print the per-command usage");
+        console.log("TODO then parse ch.README.txt for more help text");
+        break;
+      default: console.log("Unknown command: ", command);
+    }
   });
+
+_chCommand(program.command('ls [spec]'))
+  .description('list entries that match [spec]')
+  .option('-l, --long', 'Long listing [false]')
+  .option('-r, --reverse', 'Reverse listing [false]')
+  .option('-t, --time', 'Sort by database insert time [false]')
+  .option('-f, --follow', 'Print new matches as they are inserted (cannot use with -r or -t)')
+  .action(function(spec) {
+    // Open the connection to the database
+    var ch = new(chlib.ch.Connection)();
+    var options = {
+      ch : ch,
+      eachCallback : console.log,
+    }
+    if (spec) {
+      options.keyword = spec;
+    }
+    ch.tags.each(options);
+  }, _final);
+
 
 _chCommand(program.command('add <dir|file ...>'))
   .description('add data from filesystem to Chronicle')
@@ -127,6 +152,7 @@ _chCommand(program.command('add <dir|file ...>'))
     }, _final);
   });
 
+/*
 _jsonLdCommand(program.command('compact <filename|URL ...>'))
   .description('compact JSON-LD')
   .option('-c, --context <filename|URL>', 'context filename or URL')
@@ -306,6 +332,7 @@ _jsonLdCommand(program.command('normalize [filename|URL|-]'))
       }]
     }, _final);
   });
+*/
 
 program.parse(process.argv);
 

@@ -14,7 +14,7 @@ _ = require("underscore");
 
 //---------------------------------------------------------------------------
 
-var _commonOptions = {
+var _commonViewOptions = {
   reduce: true,
   stale: 'update_after',
 }
@@ -31,7 +31,7 @@ var _defaultOptions = {
  */
 exports._each = function(group_level, options) {
   options = _.defaults(options || {}, _defaultOptions);
-  options.viewOptions = _.defaults(options.viewOptions || {}, _commonOptions);
+  options.viewOptions = _.defaults(options.viewOptions || {}, _commonViewOptions);
   options.viewOptions.group_level = group_level;
   return options.ch.chronicle.view('instances/context', options.viewOptions, function(err,response) {
     if (err) {
