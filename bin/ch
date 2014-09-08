@@ -94,7 +94,7 @@ _chCommand(program.command('ls [spec]'))
       eachCallback : console.log,
     }
     if (spec) {
-      options.keyword = spec;
+      options.spec = spec;
     }
     ch.tags.each(options);
   }, _final);

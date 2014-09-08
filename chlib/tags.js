@@ -11,6 +11,7 @@
 //
 
 _ = require("underscore");
+minimatch = require("minimatch");
 
 //---------------------------------------------------------------------------
 
@@ -33,6 +34,13 @@ exports.each = function(options) {
   options = _.defaults(options || {}, _defaultOptions);
   options.viewOptions = _.defaults(options.viewOptions || {}, _commonViewOptions);
   var tag = options.tag;
+  if (options.spec) {
+    var split = options.spec.split(":");
+    options.keyword = split[0];
+    if (split[1]) {
+      options.valueMatch = split[1];
+    }
+  }
   if (options.keyword) {
     tag = options.ch.dicom.dictionary.tagByKeyword[options.keyword];
   }
@@ -45,30 +53,16 @@ exports.each = function(options) {
       options.errorCallback(err);
       return;
     }
-    response.forEach(options.eachCallback);
-    options.finishedCallback();
-  });
-}
-
-// get a distribution of the values of the given tag
-// - a count is returned for each unique value of the element
-exports.elementValueDistribution  = function(tag, callback) {
-  viewOptions = {
-    startkey: [tag, ""],
-    endkey  : [tag, {}],
-    reduce: true,
-    group_level: 2,
-    stale: 'update_after'
-  };
-  chronicle.view('tags/byTagAndValue', viewOptions, function(err,response) {
-    if (err) {
-      console.log(err);
-      return;
-    }
-    util.inspect(response);
     response.forEach(function(key,row,id) {
-      callback(key,row);
+      if (options.valueMatch) {
+        if (minimatch(key[1], options.valueMatch)) {
+          options.eachCallback(key,row,id);
+        }
+      } else {
+        options.eachCallback(key,row,id);
+      }
     });
+    options.finishedCallback();
   });
 }
 
