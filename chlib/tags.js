@@ -55,7 +55,21 @@ exports.each = function(options) {
     }
     response.forEach(function(key,row,id) {
       if (options.valueMatch) {
-        if (minimatch(key[1], options.valueMatch)) {
+        // if there's a valueMatch option, then check it.
+        // -- either on the value itself if it's a string
+        // -- or on the elements of a list
+        var values = key[1];
+        if (typeof values == 'string') {
+          values = [values,];
+        }
+        var match = _.find(values,function(value) {
+          if (typeof value == 'string') {
+            if (minimatch(value, options.valueMatch)) {
+              return value;
+            }
+          }
+        });
+        if (match) {
           options.eachCallback(key,row,id);
         }
       } else {
