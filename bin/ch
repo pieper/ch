@@ -100,6 +100,22 @@ _chCommand(program.command('ls [spec]'))
   }, _final);
 
 
+_chCommand(program.command('get [spec] [dir]'))
+  .description('get entries that match [spec], save to [dir]')
+  .action(function(spec, dir) {
+    // Open the connection to the database
+    var ch = new(chlib.ch.Connection)();
+    var options = {
+      ch : ch,
+      eachCallback : console.log,
+    }
+    if (spec) {
+      options.spec = spec;
+    }
+    ch.tags.each(options);
+  }, _final);
+
+
 _chCommand(program.command('add <dir|file ...>'))
   .description('add data from filesystem to Chronicle')
   .option('-n, --no-recurse', 'Do not recurse through the directory [false]')
