@@ -2,7 +2,7 @@
 // Copyright 2014 Isomics, Inc.
 // Author: Steve Pieper
 //
-// Distributed under the terms of the Slicer Licesnse v 1.0
+// Distributed under the terms of the Slicer License v 1.0
 // (see License.txt in this distribution).
 //
 
