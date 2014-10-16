@@ -58,13 +58,12 @@ function _final(err, results) {
 // init common command options
 function _chCommand(command) {
   command
+    .version(exports.version)
     .option('-H, --host <host>', 'host [localhost]')
     .option('-P, --port <port>', 'port [5984]')
     .option('-D, --database <database>', 'database name [Chronicle]');
   return command;
 }
-
-program.version(module.exports.version);
 
 _chCommand(program.command('help [command]'))
   .description('get detailed help')
@@ -87,16 +86,18 @@ _chCommand(program.command('ls [spec]'))
   .option('-t, --time', 'Sort by database insert time [false]')
   .option('-f, --follow', 'Print new matches as they are inserted (cannot use with -r or -t)')
   .action(function(spec) {
+    var db = program.args[1].database || 'chronicle';
+    var options = { database: db }; // TODO: should be parsed in _chCommand (how?)
     // Open the connection to the database
-    var ch = new(chlib.ch.Connection)();
-    var options = {
+    var ch = new(chlib.ch.Connection)(options);
+    var tagsOptions = {
       ch : ch,
       eachCallback : console.log,
     }
     if (spec) {
-      options.spec = spec;
+      tagsOptions.spec = spec;
     }
-    ch.tags.each(options);
+    ch.tags.each(tagsOptions);
   }, _final);
 
 
