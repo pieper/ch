@@ -15,7 +15,7 @@
 
 // npm provided standard utilities
 var commander = require("commander");
-var cradle    = require("cradle");
+var nano    = require("nano");
 var moment    = require("moment");
 var _         = require("underscore");
 var util      = require("util");
@@ -26,9 +26,8 @@ var chlib = require("../");
 // ch options
 var _defaultOptions = {
   database: 'chronicle',
-  cradleOptions: {
-    host: '127.0.0.1',
-    port: 5984,
+  nanoOptions: {
+    url: 'http://127.0.0.1:5984',
   },
 }
 
@@ -38,8 +37,8 @@ exports.Connection = function Connection(options) {
   options = _.defaults(options || {}, _defaultOptions);
 
   // set up the connection to the database
-  this.couchdb = new(cradle.Connection)(options.cradleOptions);
-  this.chronicle = this.couchdb.database(options.database);
+  this.nano = nano(options.nanoOptions);
+  this.chronicle = this.nano.use(options.database);
   var connection = this;
 
   // register the design documents with the database
@@ -48,7 +47,7 @@ exports.Connection = function Connection(options) {
   _.each(chlib.ch.modules, function(element, index, list) {
     design = element._design || {};
     _.each(design, function(value,key) {
-      connection.chronicle.save('_design/'+key, value);
+      connection.chronicle.insert(value, '_design/'+key);
     });
   });
 

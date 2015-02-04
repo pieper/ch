@@ -3,7 +3,8 @@ var _ = require("underscore");
 var util = require("util");
 var cradle = require("cradle");
 
-var chronicle = new(cradle.Connection)().database('chronicle');
+//var chronicle = new(cradle.Connection)().database('chronicle');
+var chronicle = new(cradle.Connection)().database('ch-babies');
 
 // for testing
 var emit = console.dir;

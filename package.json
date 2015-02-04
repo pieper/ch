@@ -31,10 +31,13 @@
     "cradle": "^0.6.7",
     "csv": "^0.4.0",
     "csv-parse": "0.0.6",
+    "jshashes": "^1.0.5",
     "minimatch": "^1.0.0",
     "moment": "^2.8.2",
+    "nano": "^5.12.0",
     "node-uuid": "^1.4.1",
     "rimraf": "^2.2.8",
+    "sqlite3": "^3.0.2",
     "underscore": "^1.6.0",
     "underscore.string": "^2.3.3"
   }

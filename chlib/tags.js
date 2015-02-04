@@ -48,12 +48,14 @@ exports.each = function(options) {
     options.viewOptions.startkey = [tag,""];
     options.viewOptions.endkey = [tag,{}];
   }
-  return options.ch.chronicle.view('tags/byTagAndValue', options.viewOptions, function(err,response) {
+  return options.ch.chronicle.view('tags', 'byTagAndValue', options.viewOptions, function(err,body) {
     if (err) {
       options.errorCallback(err);
       return;
     }
-    response.forEach(function(key,row,id) {
+    body.rows.forEach(function(doc) {
+      var key = doc.key
+        , id = doc.id;
       if (options.valueMatch) {
         // if there's a valueMatch option, then check it.
         // -- either on the value itself if it's a string
@@ -70,10 +72,10 @@ exports.each = function(options) {
           }
         });
         if (match) {
-          options.eachCallback(key,row,id);
+          options.eachCallback(key,id);
         }
       } else {
-        options.eachCallback(key,row,id);
+        options.eachCallback(key,id);
       }
     });
     options.finishedCallback();
@@ -84,6 +86,7 @@ var tagDesign = {
   views: {
     byTagAndValue: {
       map: function (doc) {
+        // DICOM
         var vrsToExclude = [ 'SQ', 'OW', 'OB', 'OW/OB', 'OW or OB', 'OB or OW', 'US or SS'];
         if (doc.dataset) {
           for (var key in doc.dataset) {
@@ -91,6 +94,14 @@ var tagDesign = {
               if (! (doc.dataset[key].vr in vrsToExclude) ) {
                 emit([key,doc.dataset[key].Value], 1);
               }
+            }
+          }
+        }
+        // RPDR
+        if (doc.rpdr_dataset) {
+          for (var key in doc.rpdr_dataset) {
+            if (doc.rpdr_dataset.hasOwnProperty(key)) {
+              emit([doc.source,doc.table,key,doc.rpdr_dataset[key]], 1);
             }
           }
         }

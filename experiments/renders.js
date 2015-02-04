@@ -60,6 +60,14 @@ var seriesOptions = {
   },
 };
 
+// print each series description
+var printSeriesOptions = {
+  ch : ch,
+  eachCallback : function(value, key, list) {
+    var description = value[2][1];
+    console.log(description);
+  },
+};
 
 
 var testing = true;
@@ -67,5 +75,7 @@ var testing = true;
 if (testing) {
 
   // create the per-study steps
-  ch.context.eachSeries(seriesOptions);
+  //ch.context.eachSeries(seriesOptions);
+
+  ch.context.eachSeries(printSeriesOptions);
 }

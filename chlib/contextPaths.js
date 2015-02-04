@@ -16,11 +16,31 @@ _ = require("underscore");
 //---------------------------------------------------------------------------
 
 /**
+ * Splits a path and un-escapes illegal slash character
+ */
+exports.pathSplit = function (path) {
+  var rawPathComponents = path.split('/');
+  var pathComponents = [];
+  _.each(rawPathComponents, function(element, index) {
+    element = element.replace('.slash.', '/');
+    pathComponents.push(element);
+  });
+  return(pathComponents);
+}
+
+/**
+ * escapes illegal slash character
+ */
+exports.escapePathComponent = function (component) {
+  return (component.replace('/', '.slash.'));
+}
+
+/**
  * Accepts a fuse path and returns the corresponding 
  * chronicle search key version.
  */
 exports.pathToKey = function (path) {
-  var pathComponents = path.split('/');
+  var pathComponents = exports.pathSplit(path);
   var key = [];
   _.each(pathComponents, function(element, index) {
     if (element !== "") {
@@ -36,6 +56,7 @@ exports.pathToKey = function (path) {
       key.push(listForm);
     }
   });
+  console.log('path', path, 'became key', key);
   return(key);
 }
 
@@ -46,12 +67,14 @@ exports.pathToKey = function (path) {
 exports.keyToPath = function (key) {
   var path = "";
   _.each(key, function(element,index) {
+    element = exports.escapePathComponent(element);
     if (typeof element !== 'string') {
       path += "/[" + element + "]";
     } else {
       path += "/" + element;
     }
   });
+  console.log('key', key, 'became path', path);
   return(path);
 }
 
@@ -78,7 +101,7 @@ exports.pathIsAttachment = function (path) {
  * (dataset is special case of attachment)
  */
 exports.pathAttachmentPath = function (path) {
-  var pathComponents = path.split('/');
+  var pathComponents = exports.pathSplit(path);
   return (pathComponents[5]);
 }
 
@@ -86,7 +109,7 @@ exports.pathAttachmentPath = function (path) {
  * Accepts a path and returns the doc ID if there is one
  */
 exports.pathDocumentID = function (path) {
-  var pathComponents = path.split('/');
+  var pathComponents = exports.pathSplit(path);
   return (pathComponents[4]);
 }
 
@@ -155,7 +178,7 @@ to simplify processing.  Possible options:
 */
 
 //TODO: move these to tests/path-tests.js
-if (false) {
+if (true) {
 
 //TODO: move these to tests/path-tests.js
 var paths = [
