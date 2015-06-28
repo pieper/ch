@@ -178,7 +178,7 @@ to simplify processing.  Possible options:
 */
 
 //TODO: move these to tests/path-tests.js
-if (true) {
+if (false) {
 
 //TODO: move these to tests/path-tests.js
 var paths = [
